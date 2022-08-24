@@ -9,9 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tiptap/react": "^2.0.0-beta.114",
+    "@tiptap/starter-kit": "^2.0.0-beta.191",
+    "axios": "^0.27.2",
+    "babel-plugin-styled-components": "^2.0.7",
     "next": "12.2.5",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-quill": "^2.0.0",
+    "styled-components": "^5.3.5"
   },
   "devDependencies": {
     "@types/node": "18.7.11",

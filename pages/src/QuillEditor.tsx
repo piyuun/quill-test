@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import ReactQuill from "react-quill";
 import axios from "axios";
@@ -33,7 +33,7 @@ const StyledButton = styled.button`
 export default function QuillEditor() {
 	const [value, setValue] = useState<string>("");
 	const [responseArray, setResponseArray] = useState<string[]>([]);
-
+	const quillRef = useRef();
 	const removeFrontP = value.replace("<p>", "");
 	const removeLastP = removeFrontP.substring(
 		0,
@@ -43,6 +43,32 @@ export default function QuillEditor() {
 
 	const onChange = (content, delta, source, editor) => {
 		setValue(editor.getHTML());
+		console.log("--------------");
+		console.log(editor.getSelection().index);
+		console.log(JSON.stringify(editor.getContents()));
+		// console.log(JSON.stringify(editor.getContents().ops[0].insert));
+	};
+
+	const setMultiline = () => {
+		quillRef?.current
+			?.getEditor()
+			.setContents([
+				{ insert: "Hello" },
+				{ insert: "World\nhi", attributes: { bold: true } },
+				{ insert: "\n\n" },
+			]);
+	};
+
+	const hi = {
+		ops: [
+			{ insert: "eef" },
+			{ attributes: { bold: true }, insert: "evv" },
+			{ insert: "e ! nenv" },
+			{ attributes: { italic: true }, insert: "nne" },
+			{ insert: "!n 1\nevn" },
+			{ attributes: { underline: true }, insert: "wn" },
+			{ insert: "ennv!\n" },
+		],
 	};
 
 	useEffect(() => {
@@ -50,7 +76,10 @@ export default function QuillEditor() {
 	}, [responseArray]);
 
 	useEffect(() => {
-		console.log(value);
+		// const selection = quillRef?.current?.getEditor().getSelection();
+		// const path = selection?.index;
+		// console.log(path);
+		// console.log(quillRef?.current?.getEditor());
 	}, [value]);
 
 	const onClick = () => {
@@ -74,8 +103,8 @@ export default function QuillEditor() {
 		}
 	};
 
-	const setMultiline = () => {
-		setValue("<p>hi</p><p><br></p><p>1</p>");
+	const handleChangeSelection = (range) => {
+		console.log();
 	};
 
 	return (
@@ -84,7 +113,13 @@ export default function QuillEditor() {
 				<StyledButton onClick={onClick}>Send!</StyledButton>
 				<StyledButton onClick={setMultiline}>Set!</StyledButton>
 			</ButtonDiv>
-			<RestyledReactQuill theme="snow" value={value} onChange={onChange} />
+			<RestyledReactQuill
+				theme="snow"
+				value={value}
+				onChange={onChange}
+				onChangeSelection={handleChangeSelection}
+				ref={quillRef}
+			/>
 			<Value>{value}</Value>
 		</>
 	);
